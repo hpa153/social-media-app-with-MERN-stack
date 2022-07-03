@@ -1,12 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { TextField, Button, Typography, Paper } from "@material-ui/core";
 import FileBase from 'react-file-base64';
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import useStyles from './styles';
-import { createPost } from "../../actions/posts";
+import { createPost, updatePost } from "../../actions/posts";
 
-const Form = () => {
+const Form = ({ currentID, setCurrentID }) => {
   const classes = useStyles();
   const [postData, setPostData] = useState({
     creator: "",
@@ -16,14 +16,27 @@ const Form = () => {
     selectedFile: "",
   });
   const dispatch = useDispatch();
+  const post = useSelector((state) => currentID ? state.posts.find((p) => p._id === currentID) : null);
+
+  useEffect(() => {
+    if(post) {
+      setPostData(post);
+    }
+  }, [post]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    dispatch(createPost(postData))
+    if(currentID) {
+      dispatch(updatePost(currentID, postData));
+    } else {
+      dispatch(createPost(postData));
+    }
+    clear();
   }
 
   const clear = () => {
+    setCurrentID(null);
     setPostData({
       creator: "",
       title: "",
@@ -41,7 +54,7 @@ const Form = () => {
         className={`${classes.root} ${classes.form}`}
         onSubmit={handleSubmit}
       >
-        <Typography variant="h6">Create Your Memory</Typography>
+        <Typography variant="h6">{currentID ? "Update" : "Create"} Your Story</Typography>
         <TextField
           name="creator"
           variant="outlined"
@@ -72,7 +85,7 @@ const Form = () => {
           label="Tags"
           fullWidth
           value={postData.tags}
-          onChange={(e) => setPostData({ ...postData, tags: e.target.value })}
+          onChange={(e) => setPostData({ ...postData, tags: e.target.value.split(",") })}
         />
         <div className={classes.fileInput}>
           <FileBase
