@@ -50,7 +50,6 @@ const Form = ({ currentID, setCurrentID }) => {
     <Paper className={classes.paper}>
       <form
         autoComplete="off"
-        noValidate
         className={`${classes.root} ${classes.form}`}
         onSubmit={handleSubmit}
       >
@@ -60,6 +59,7 @@ const Form = ({ currentID, setCurrentID }) => {
           variant="outlined"
           label="Creator"
           fullWidth
+          required
           value={postData.creator}
           onChange={(e) => setPostData({ ...postData, creator: e.target.value })}
         />
@@ -68,6 +68,7 @@ const Form = ({ currentID, setCurrentID }) => {
           variant="outlined"
           label="Title"
           fullWidth
+          required
           value={postData.title}
           onChange={(e) => setPostData({ ...postData, title: e.target.value })}
         />
@@ -76,13 +77,14 @@ const Form = ({ currentID, setCurrentID }) => {
           variant="outlined"
           label="Message"
           fullWidth
+          required
           value={postData.message}
           onChange={(e) => setPostData({ ...postData, message: e.target.value })}
         />
         <TextField
           name="tags"
           variant="outlined"
-          label="Tags"
+          label="Tags (Comma seperated)"
           fullWidth
           value={postData.tags}
           onChange={(e) => setPostData({ ...postData, tags: e.target.value.split(",") })}
