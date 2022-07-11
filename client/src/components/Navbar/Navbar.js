@@ -3,6 +3,8 @@ import { AppBar, Typography, Toolbar, Avatar, Button } from '@material-ui/core';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { LOGOUT } from '../../constants/actionTypes';
+import { gapi } from 'gapi-script';
+import decode from 'jwt-decode';
 
 import useStyles from './styles';
 import memories from '../../images/memories.png';
@@ -17,10 +19,37 @@ const Navbar = () => {
   useEffect(() => {
     const token = user?.token;
 
+    if(token) {
+      const decodedToken = decode(token);
+
+      if(decodedToken.exp * 1000 < new Date().getTime()) {
+        logout();
+      }
+    }
+
     setUser(JSON.parse(localStorage.getItem("profile")));
   }, [location]);
 
   const logout = () => {
+    const token = user?.token;
+
+    if(token.length >= 500) {
+      window.gapi.load('auth2', () => {
+        window.gapi.auth2
+          .init({
+            client_id: "616851694573-p4h40u6jkak3rk04qjo91pcle1ums0ov.apps.googleusercontent.com",
+          })
+          .then(() => {
+            window.gapi.auth2
+              .getAuthInstance()
+              .signOut()
+              .then(function() {
+                console.log('User signed out.');
+              });
+          });
+      });
+    }
+
     dispatch({ type: LOGOUT })
     setUser(null);
     navigate("/");

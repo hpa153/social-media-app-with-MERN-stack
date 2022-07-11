@@ -10,11 +10,21 @@ import useStyles from './styles';
 import Input from './Input';
 import Icon from './Icon';
 import { AUTH } from '../../constants/actionTypes';
+import { signin, signup } from '../../actions/auth';
+
+const initialState = {
+  firstName: "",
+  lastName: "",
+  email: "",
+  password: "",
+  confirmedPassword: "",
+};
 
 const Auth = () => {
   const classes = useStyles();
   const [isSignedUp, setIsSignedUp] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [formData, setFormData] = useState(initialState);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -28,12 +38,18 @@ const Auth = () => {
     gapi.load("client:auth2", start);
   }, []);
 
-  const handleSubmit = () => {
-
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    
+    if(isSignedUp) {
+      dispatch(signup(formData, navigate))
+    } else {
+      dispatch(signin(formData, navigate))
+    }
   };
 
-  const handleChange = () => {
-
+  const handleChange = (e) => {
+    setFormData({... formData, [e.target.name]: e.target.value});
   };
 
   const handleShowPassword = () => {
@@ -108,7 +124,7 @@ const Auth = () => {
             {
               isSignedUp &&
               <Input
-                name="confirmPassword"
+                name="confirmedPassword"
                 label="Confirm Password"
                 handleChange={handleChange}
                 type="password"
