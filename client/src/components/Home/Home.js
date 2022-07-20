@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Container, Grow, Grid, Paper, AppBar, TextField, Button } from '@material-ui/core';
 import { useDispatch } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -24,10 +24,6 @@ const Home = () => {
   const navigate = useNavigate();
   const page = query.get("page") || 1;
   const searchQuery = query.get("searchQuery");
-
-  useEffect(() => {
-    dispatch(getPosts());
-  }, [dispatch, currentID])
 
   const handleKeyPress = (e) => {
     if(e.keyCode === 13) {
@@ -82,7 +78,7 @@ const Home = () => {
             </AppBar>
             <Form currentID={currentID} setCurrentID={setCurrentID} />
             <Paper className={classes.pagination} elevation={6}>
-              <Paginate />
+              <Paginate page={page}/>
             </Paper>
           </Grid>
         </Grid>
