@@ -77,9 +77,13 @@ const Home = () => {
               <Button color="primary" variant="contained" onClick={searchPost}>Search</Button>
             </AppBar>
             <Form currentID={currentID} setCurrentID={setCurrentID} />
-            <Paper className={classes.pagination} elevation={6}>
-              <Paginate page={page}/>
-            </Paper>
+            {
+              (!searchQuery && !tags.length) && (
+                <Paper className={classes.pagination} elevation={6}>
+                  <Paginate page={page}/>
+                </Paper>
+              )
+            }
           </Grid>
         </Grid>
       </Container>
