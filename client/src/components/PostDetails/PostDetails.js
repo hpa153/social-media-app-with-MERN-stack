@@ -6,6 +6,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 
 import useStyles from './styles';
 import { getPost, getPostsBySearch } from '../../actions/posts';
+import CommentSection from './CommentSection';
 
 const PostDetails = () => {
   const { post, posts, isLoading } = useSelector((state) => state.posts);
@@ -52,7 +53,7 @@ const PostDetails = () => {
           <Divider style={{ margin: '20px 0' }} />
           <Typography variant="body1"><strong>Realtime Chat - coming soon!</strong></Typography>
           <Divider style={{ margin: '20px 0' }} />
-          {/* <CommentSection post={post} /> */}
+          <CommentSection post={post} />
           <Divider style={{ margin: '20px 0' }} />
         </div>
         <div className={classes.imageSection}>
@@ -64,9 +65,9 @@ const PostDetails = () => {
           <Typography gutterBottom variant="h5">You might also like:</Typography>
           <Divider />
           <div className={classes.recommendedPosts}>
-            {recommendedPosts.map(({ title, name, message, likes, selectedFile, _id }) => (
-              <Grid key={post._id} item xs={12} sm={6} md={4} lg={3}>
-                <div style={{ margin: '20px', cursor: 'pointer' }} key={_id} onClick={() => openPost(_id)}>
+            {recommendedPosts.map(({ title, name, message, likes, selectedFile, _id }, id) => (
+              <Grid key={id} item xs={12} sm={6} md={4} lg={3}>
+                <div style={{ margin: '20px', cursor: 'pointer' }} onClick={() => openPost(_id)}>
                   <Typography gutterBottom variant="h6">{title}</Typography>
                   <Typography gutterBottom variant="subtitle2">{name}</Typography>
                   <Typography gutterBottom variant="subtitle2">{message}</Typography>

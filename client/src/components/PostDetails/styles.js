@@ -19,16 +19,18 @@ export default makeStyles((theme) => ({
   section: {
     borderRadius: '20px',
     margin: '10px',
-    flex: 1,
   },
   imageSection: {
+    width: '40%',
     marginLeft: '20px',
     [theme.breakpoints.down('sm')]: {
       marginLeft: 0,
     },
   },
   recommendedPosts: {
+    width: '100%',
     display: 'flex',
+    flexWrap: 'wrap',
     [theme.breakpoints.down('sm')]: {
       flexDirection: 'column',
     },
@@ -44,10 +46,13 @@ export default makeStyles((theme) => ({
   commentsOuterContainer: {
     display: 'flex',
     justifyContent: 'space-between',
+    width: '100%',
   },
   commentsInnerContainer: {
     height: '200px',
     overflowY: 'auto',
     marginRight: '30px',
+    display: 'flex',
+    flexDirection: 'row',
   },
 }));

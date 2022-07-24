@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Card, CardActions, CardContent, CardMedia, Button, Typography, ButtonBase } from '@material-ui/core';
 import ThumbsUpAltIcon from '@material-ui/icons/ThumbUpAlt';
 import ThumbUpAltOutlined from '@material-ui/icons/ThumbUpAltOutlined';
@@ -16,14 +16,16 @@ const Post = ({ post, setCurrentID }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem('profile'));
+  const [likes, setLikes] = useState(post?.likes);
+  const userID = user?.result?.googleId || user?.result?._id;
 
   const Likes = () => {
-    if (post.likes.length > 0) {
-      return post.likes.find((like) => like === (user?.result?.googleId || user?.result?._id))
+    if (likes.length > 0) {
+      return likes.find((like) => like === userID)
         ? (
-          <><ThumbsUpAltIcon fontSize="small" />&nbsp;{post.likes.length > 2 ? `You and ${post.likes.length - 1} others` : `${post.likes.length} like${post.likes.length > 1 ? 's' : ''}` }</>
+          <><ThumbsUpAltIcon fontSize="small" />&nbsp;{likes.length > 2 ? `You and ${likes.length - 1} others` : `${likes.length} like${likes.length > 1 ? 's' : ''}` }</>
         ) : (
-          <><ThumbUpAltOutlined fontSize="small" />&nbsp;{post.likes.length} {post.likes.length === 1 ? 'Like' : 'Likes'}</>
+          <><ThumbUpAltOutlined fontSize="small" />&nbsp;{likes.length} {likes.length === 1 ? 'Like' : 'Likes'}</>
         );
     }
 
@@ -32,6 +34,16 @@ const Post = ({ post, setCurrentID }) => {
 
   const openPost = () => {
     navigate(`/posts/${post._id}`);
+  }
+
+  const handleLike = async () => {
+    dispatch(likePost(post._id));
+
+    if(likes.find((like) => like === userID)) {
+      setLikes(likes.filter((id) => id !== userID));
+    } else {
+      setLikes([ ...likes, userID ]);
+    }
   }
 
   return (
@@ -67,7 +79,7 @@ const Post = ({ post, setCurrentID }) => {
         
       </ButtonBase>
       <CardActions className={classes.cardActions}>
-        <Button color="primary" size="small" disabled={!user?.result} onClick={() => dispatch(likePost(post._id))}>
+        <Button color="primary" size="small" disabled={!user?.result} onClick={handleLike}>
           <Likes />
         </Button>
         {
