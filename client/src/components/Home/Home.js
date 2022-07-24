@@ -7,7 +7,7 @@ import ChipInput from 'material-ui-chip-input';
 import useStyles from './styles';
 import Posts from '../Posts/Posts';
 import Form from '../Forms/Form';
-import { getPosts, getPostsBySearch } from '../../actions/posts';
+import { getPostsBySearch } from '../../actions/posts';
 import Paginate from '../Pagination/Pagination';
 
 function useQuery() {

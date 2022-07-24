@@ -15,7 +15,7 @@ const Form = ({ currentID, setCurrentID }) => {
     selectedFile: "",
   });
   const dispatch = useDispatch();
-  const post = useSelector((state) => currentID ? state.posts.find((p) => p._id === currentID) : null);
+  const post = useSelector((state) => currentID ? state.posts.posts.find((p) => p._id === currentID) : null);
   const user = JSON.parse(localStorage.getItem("profile"));
 
   useEffect(() => {
